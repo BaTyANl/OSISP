@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "string.h": "c",
+        "colors.h": "c",
+        "menupanel.h": "c",
+        "infopanel.h": "c",
+        "hexpanel.h": "c",
+        "normalpanel.h": "c",
+        "ncurses.h": "c",
+        "blockpanel.h": "c"
+    }
+}
