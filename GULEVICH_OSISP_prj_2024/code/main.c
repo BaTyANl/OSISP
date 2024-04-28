@@ -7,52 +7,52 @@
 #include "normalPanel.h"
 
 
-void init_app();
-void init_menu_panel();
-void init_block_panel();
-void init_info_panel();
-void init_hex_panel();
-void init_normal_panel();
+void init_app();            //Инициализация приложения
+void init_menu_panel();     //Инициализация меню
+void init_block_panel();    //Инициализация панели с блочной информацией
+void init_info_panel();     //Инициализация панели информации
+void init_hex_panel();      //Инициализация панели байт
+void init_normal_panel();   //Инициализация панели байт в ASCII
 
 
 int main() {
-    WINDOW *menu_win;
+    WINDOW *menu_win;       //Окна
     WINDOW *info_win;
     WINDOW *hex_win;
     WINDOW *normal_win;
     WINDOW *block_win;
 
-    int highlight = 1;
+    int highlight = 1;      //Переменная подсветки выбранного элемента меню
 
-    info stats;
+    info stats;             //Тестовые структуры
     block block_stats;
 
-    initscr();
+    initscr();              //Инициализация ncurses
     clear();
-    noecho();
-    ext_start_color();
-    cbreak();
-    curs_set(false);
-
+    noecho();               //Отключение показа вводимых символов
+    ext_start_color();      //Подключение цветов
+    cbreak();               //Вводимые символы передаются программе сразу после ввода
+    curs_set(false);        //Отключение курсора
+                            //Инициализация окон
     menu_win = newwin(HEIGHT_MENU, WIDTH_MENU, 0, 0);
     info_win = newwin(HEIGHT_INFO, WIDTH_INFO, 1, 0);
     hex_win = newwin(HEIGHT_HEX, WIDTH_HEX, 1, WIDTH_INFO);
     normal_win = newwin(HEIGHT_NORMAL, WIDTH_NORMAL, 1, WIDTH_INFO + WIDTH_HEX);
     block_win = newwin(HEIGHT_BLOCK, WIDTH_BLOCK, 1 + HEIGHT_INFO, 0);
 
-    refresh();
+    refresh();                      //Обновление окна терминала
 
-    print_menu(menu_win, highlight);
+    print_menu(menu_win, highlight);        //Вывод всех панелей 
     print_info(info_win, stats);
     print_hex(hex_win);
     print_normal(normal_win);
     print_block(block_win, block_stats);
     while(1){
-        int choise = menu_choise(menu_win, highlight);
+        int choise = menu_choise(menu_win, highlight);  //Выбор меню
 
         switch (choise){
             case 1:{
-                filePathInput();
+                filePathInput();        //Вызов панели с вводом файла
                 print_hex(hex_win);
                 break;
             }
@@ -65,7 +65,7 @@ int main() {
                 break;
             }
             case 4:{
-                helpPanel();
+                helpPanel();            //Вызов панели с помощью
                 print_hex(hex_win);
                 break;
             }
@@ -75,9 +75,8 @@ int main() {
         }
     }
     end:
-    clrtoeol();
-    refresh();
-    endwin();
+    refresh();              //Обновление окна
+    endwin();               //Закрыть все окна и закончить работу с ncurses
     return 0;
 }
 

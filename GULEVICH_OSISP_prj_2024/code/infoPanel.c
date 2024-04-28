@@ -9,20 +9,20 @@ const char* info_fld[] = {  //Сообщения для вывода
 };
 
 
-void print_stats(WINDOW* info_win, info stats){
+void print_stats(WINDOW* info_win, info stats){ //Вывод информации
     int y = 2;
     int x = 1;
-    stats.types = file;
+    stats.types = file;                         //Тестовая структура
     stats.name = "file.txt";
     stats.path = "D/papka/papka2/papka3/";
     stats.size = 12345;
     stats.access = READ_ONLY;
 
-    wattron(info_win, COLOR_PAIR(INFO_PANEL));
-    mvwprintw(info_win, y, 1, "%s", info_fld[0]);
+    wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
+    mvwprintw(info_win, y, 1, "%s", info_fld[0]);       //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
 
-    if(stats.types == file)
+    if(stats.types == file)                             //Вывод 
         mvwprintw(info_win, ++y, 1, "%s", "File");
     else
         if(stats.types == folder)
@@ -31,18 +31,18 @@ void print_stats(WINDOW* info_win, info stats){
             mvwprintw(info_win, ++y, 1, "%s", "Link");
     y++;
 
-    wattron(info_win, COLOR_PAIR(INFO_PANEL));
-    mvwprintw(info_win, ++y, 1, "%s", info_fld[1]);
+    wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
+    mvwprintw(info_win, ++y, 1, "%s", info_fld[1]);     //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
-    mvwprintw(info_win, ++y, 1, "%s", stats.name);
+    mvwprintw(info_win, ++y, 1, "%s", stats.name);      //Вывод 
     y++;
 
-    wattron(info_win, COLOR_PAIR(INFO_PANEL));
-    mvwprintw(info_win, ++y, 1, "%s", info_fld[2]);
+    wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
+    mvwprintw(info_win, ++y, 1, "%s", info_fld[2]);     //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
     if(strlen(stats.path) > 13){
         y++;
-        for(int i = 0, j = 0; i < strlen(stats.path); i++, j++){
+        for(int i = 0, j = 0; i < strlen(stats.path); i++, j++){    //Вывод с переносом
             mvwaddch(info_win, y, j + x, stats.path[i]);
             if(stats.path[i] == '/'){
                 y++;
@@ -53,28 +53,28 @@ void print_stats(WINDOW* info_win, info stats){
     } else{
         mvwprintw(info_win, ++y, 1, "%s", stats.path);
     }
-    wattron(info_win, COLOR_PAIR(INFO_PANEL));
-    mvwprintw(info_win, ++y, 1, "%s", info_fld[3]);
+    wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
+    mvwprintw(info_win, ++y, 1, "%s", info_fld[3]);     //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
 
-    mvwprintw(info_win, ++y, 1, "%d B", stats.size);
+    mvwprintw(info_win, ++y, 1, "%d B", stats.size);       //Вывод 
     y++;
 
-    wattron(info_win, COLOR_PAIR(INFO_PANEL));
-    mvwprintw(info_win, ++y, 1, "%s", info_fld[4]);
+    wattron(info_win, COLOR_PAIR(INFO_PANEL));              //Цвет
+    mvwprintw(info_win, ++y, 1, "%s", info_fld[4]);        //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
-    if(stats.access == READ_ONLY)
+    if(stats.access == READ_ONLY)                           //Вывод 
         mvwprintw(info_win, ++y, 1, "%s", "Read-Only");
     else
         mvwprintw(info_win, ++y, 1, "%s", "Read-Write");
 }
 
-void print_info(WINDOW *info_win, info stats){
-    box(info_win, 0, 0);
-    wattron(info_win, COLOR_PAIR(MENU_GREEN));
-    mvwprintw(info_win, 0, 1, "%s", "Info panel");
+void print_info(WINDOW *info_win, info stats){              //Создание окна
+    box(info_win, 0, 0);                                    //Обводка окна
+    wattron(info_win, COLOR_PAIR(MENU_GREEN));              //Цвет
+    mvwprintw(info_win, 0, 1, "%s", "Info panel");          //Вывод 
     wattroff(info_win, COLOR_PAIR(MENU_GREEN));
-    print_stats(info_win, stats);
+    print_stats(info_win, stats);                           //Вывод информации
 
-    wrefresh(info_win);
+    wrefresh(info_win);                                     //Обновление экрана
 }
