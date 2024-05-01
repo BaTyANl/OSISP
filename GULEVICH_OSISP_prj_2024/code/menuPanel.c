@@ -29,8 +29,8 @@ const char *helpMessage[] = {                   //Cоощение помощи
 
 const char *choices[] = {                       //Текст менюшки
     "Open file",
+    "Use offset",
     "Change bytes",
-    "Save Changes",
     "Help",
     "Exit programm"
 };
@@ -45,9 +45,9 @@ void print_menu(WINDOW *menu_win, int highlight){   //Функция вывод�
         {
             if(highlight == i + 1) //Подсветка выбранного пункта меню
             {
-                wattron(menu_win, COLOR_PAIR(SLCTD_TOP_PANEL)); //Включение аттрибута цвета
+                wattron(menu_win, COLOR_PAIR(MENU_SLCTD_ITEM)); //Включение аттрибута цвета
                 mvwprintw(menu_win, y, x, "%s", choices[i]);    //Вывод выбранного пункта
-                wattroff(menu_win, COLOR_PAIR(SLCTD_TOP_PANEL)); //Включение аттрибута цвета
+                wattroff(menu_win, COLOR_PAIR(MENU_SLCTD_ITEM)); //Включение аттрибута цвета
             }
             else{
                 mvwprintw(menu_win, y, x, "%s", choices[i]);    //Вывод остальных пунктов меню
@@ -89,6 +89,7 @@ int menu_choise(WINDOW *menu_win, int highlight){   //Выбор в меню
     return choise;
 }
 
+
 void printFilePanel(WINDOW* win_open){              //Вывод панели с вводом пути к файлу
 
     wbkgd(win_open, COLOR_PAIR(TOP_PANEL_COLOR));   //Установка цвета для окна
@@ -112,14 +113,66 @@ void filePathInput(){                               //Ввод пути к фа�
         return;
     }
     char path[40];
-    curs_set(1);                            //Включение отображения курсора
+    curs_set(1);                                    //Включение отображения курсора
+    echo();           
     mvwgetstr(win_open, 4, 1, path);        //Починить отображение ввода
+    noecho();
     curs_set(0);
-    mvwprintw(win_open, 5, 1 , "%s", path); 
-    wrefresh(win_open);                     //Обновление окна
     getch();
+    //открытие файла
     delwin(win_open);                       //Освобождение памяти
 }
+
+
+void printOffsetPanel(WINDOW* off_open){              //Вывод панели с вводом пути к файлу
+
+    wbkgd(off_open, COLOR_PAIR(TOP_PANEL_COLOR));   //Установка цвета для окна
+    box(off_open, 0, 0);                            //Обозначение границ окна
+    mvwprintw(off_open, 0, 9 , "%s", "Memory opening"); //Вывод строк
+    mvwprintw(off_open, 2, 1 , "%s", "Input offset.");
+    mvwprintw(off_open, 3, 1 , "%s", "Press F1 to cancel.");
+    wrefresh(off_open);                             //Обновление окна
+}
+
+void offsetInput(unsigned char** bytes){                               //Ввод пути к файлу
+    WINDOW* off_open;                               //Окно
+    int maxx, maxy;
+    getmaxyx(stdscr, maxy, maxx);
+    off_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);    //Создание окна
+    printOffsetPanel(off_open);                                 //Вывод окна
+    keypad(off_open, true);                                     //Выключение обработки нажатий
+    int c = wgetch(off_open);
+    if(c == KEY_F(1)){                                          //F1 - Выход
+        delwin(off_open);
+        return;
+    }
+    off_t offset;
+    echo();
+
+    if (mvwscanw(off_open, 4, 1, "%ld", &offset) != 1){
+        //окно с ошибкой;
+    }
+
+    noecho();
+    curs_set(0);
+    int error = readOffset(bytes, offset);
+    if (error ==2){
+        mvwprintw(off_open, 5, 1 , "%s", "Opening.");
+    }
+    if (error == 1){
+        mvwprintw(off_open, 5, 1 , "%s", "Success.");
+    }
+    if (error == 3){
+        mvwprintw(off_open, 5, 1 , "%s", "Cursor.");
+    }
+    if (error == 4){
+        mvwprintw(off_open, 5, 1 , "%s", "Reading.");
+    }
+    wrefresh(off_open);
+    getch();
+    delwin(off_open);                       //Освобождение памяти
+}
+
 
 void printHelp(WINDOW* win_help, int page){ //Вывод окна помощи
     werase(win_help);                       //Очистка окна

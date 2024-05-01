@@ -1,6 +1,6 @@
 #include "colors.h"
 
-void clear_y_str(WINDOW* win, int y, int start_x, int len) {
+void clear_y_str(WINDOW* win, int y, int start_x, int len) {    //Цвета
     int size = start_x + len;
     if(len == 0) {
         size = getmaxx(win);

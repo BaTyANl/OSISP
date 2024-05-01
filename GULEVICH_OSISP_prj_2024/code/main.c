@@ -20,8 +20,9 @@ int main() {
     WINDOW *info_win;
     WINDOW *hex_win;
     WINDOW *normal_win;
-    WINDOW *block_win;
-
+    WINDOW *block_win;  
+    unsigned char *bytes;
+    bytes = (unsigned char*)calloc(304, sizeof(unsigned char));
     int highlight = 1;      //Переменная подсветки выбранного элемента меню
 
     info stats;             //Тестовые структуры
@@ -44,7 +45,7 @@ int main() {
 
     print_menu(menu_win, highlight);        //Вывод всех панелей 
     print_info(info_win, stats);
-    print_hex(hex_win);
+    print_hex(hex_win, NULL);
     print_normal(normal_win);
     print_block(block_win, block_stats);
     while(1){
@@ -53,11 +54,12 @@ int main() {
         switch (choise){
             case 1:{
                 filePathInput();        //Вызов панели с вводом файла
-                print_hex(hex_win);
+                //print_hex(hex_win);
                 break;
             }
             case 2:{
-                getch();
+                offsetInput(&bytes);
+                print_hex(hex_win, bytes);
                 break;
             }
             case 3:{
@@ -66,7 +68,7 @@ int main() {
             }
             case 4:{
                 helpPanel();            //Вызов панели с помощью
-                print_hex(hex_win);
+                //print_hex(hex_win);
                 break;
             }
             case 5:{

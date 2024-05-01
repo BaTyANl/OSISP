@@ -17,7 +17,7 @@ typedef struct info     //Структура с информацией
     enum types{         //Тип
        folder = 1,
        file,
-       link
+       symLink
     }types;
 
     char* path;         //Полный путь

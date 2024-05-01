@@ -8,6 +8,7 @@
         "hexpanel.h": "c",
         "normalpanel.h": "c",
         "ncurses.h": "c",
-        "blockpanel.h": "c"
+        "blockpanel.h": "c",
+        "unistd.h": "c"
     }
 }

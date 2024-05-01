@@ -14,7 +14,7 @@ void print_stats(WINDOW* info_win, info stats){ //Вывод информаци�
     int x = 1;
     stats.types = file;                         //Тестовая структура
     stats.name = "file.txt";
-    stats.path = "D/papka/papka2/papka3/";
+    stats.path = "D/pap/papka2/papka3/";
     stats.size = 12345;
     stats.access = READ_ONLY;
 
@@ -72,7 +72,7 @@ void print_stats(WINDOW* info_win, info stats){ //Вывод информаци�
 void print_info(WINDOW *info_win, info stats){              //Создание окна
     box(info_win, 0, 0);                                    //Обводка окна
     wattron(info_win, COLOR_PAIR(MENU_GREEN));              //Цвет
-    mvwprintw(info_win, 0, 1, "%s", "Info panel");          //Вывод 
+    mvwprintw(info_win, 0, 3, "%s", "Info panel");          //Вывод 
     wattroff(info_win, COLOR_PAIR(MENU_GREEN));
     print_stats(info_win, stats);                           //Вывод информации
 
