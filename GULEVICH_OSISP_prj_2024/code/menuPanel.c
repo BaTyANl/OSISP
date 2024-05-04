@@ -71,13 +71,17 @@ int menu_choise(WINDOW *menu_win, int highlight){   //Выбор в меню
                 highlight = 5;
             else
                 --(highlight);
-        break;
+            break;
         case KEY_RIGHT:                             // ->
             if(highlight == 5)
                 highlight = 1;
             else
                 ++(highlight);
-        break;
+            break;
+        case KEY_F(2):{
+            return 11;
+            break;
+        }
         case 10:                                    //Enter
             choise = highlight;
             break;
@@ -134,7 +138,7 @@ void printOffsetPanel(WINDOW* off_open){              //Вывод панели 
     wrefresh(off_open);                             //Обновление окна
 }
 
-void offsetInput(unsigned char** bytes){                               //Ввод пути к файлу
+void offsetInput(unsigned char** bytes, off_t* offset){                               //Ввод пути к файлу
     WINDOW* off_open;                               //Окно
     int maxx, maxy;
     getmaxyx(stdscr, maxy, maxx);
@@ -146,17 +150,17 @@ void offsetInput(unsigned char** bytes){                               //Вво�
         delwin(off_open);
         return;
     }
-    off_t offset;
+    curs_set(1);
     echo();
 
-    if (mvwscanw(off_open, 4, 1, "%ld", &offset) != 1){
+    if (mvwscanw(off_open, 4, 1, "%ld", &(*offset)) != 1){
         //окно с ошибкой;
     }
 
     noecho();
     curs_set(0);
-    int error = readOffset(bytes, offset);
-    if (error ==2){
+    int error = readOffset(bytes, *offset);
+    /*if (error ==2){
         mvwprintw(off_open, 5, 1 , "%s", "Opening.");
     }
     if (error == 1){
@@ -167,7 +171,7 @@ void offsetInput(unsigned char** bytes){                               //Вво�
     }
     if (error == 4){
         mvwprintw(off_open, 5, 1 , "%s", "Reading.");
-    }
+    }*/
     wrefresh(off_open);
     getch();
     delwin(off_open);                       //Освобождение памяти

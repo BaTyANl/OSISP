@@ -12,6 +12,7 @@ typedef struct block{   //Структура о блочной инфе
     int block;          //Номер блока
     int block_size;     //Размер блока
     int sector;         //Номер сектора в блоке
+    int sector_size;
 }block;
 
 static void print_block(WINDOW *block_win, block block_stats);  //Вывод панельки

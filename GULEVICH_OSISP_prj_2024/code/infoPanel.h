@@ -3,7 +3,7 @@
 #include <string.h>
 #include "colors.h"
                         //Панель с информацией
-#define WIDTH_INFO 16
+#define WIDTH_INFO 13
 #define HEIGHT_INFO 21
 
 #define FOLDER_TYPE "folder"

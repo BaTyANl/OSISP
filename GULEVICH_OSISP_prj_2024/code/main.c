@@ -7,6 +7,7 @@
 #include "normalPanel.h"
 
 
+
 void init_app();            //Инициализация приложения
 void init_menu_panel();     //Инициализация меню
 void init_block_panel();    //Инициализация панели с блочной информацией
@@ -16,6 +17,7 @@ void init_normal_panel();   //Инициализация панели байт �
 
 
 int main() {
+    setlocale(LC_ALL, "");
     WINDOW *menu_win;       //Окна
     WINDOW *info_win;
     WINDOW *hex_win;
@@ -24,7 +26,7 @@ int main() {
     unsigned char *bytes;
     bytes = (unsigned char*)calloc(304, sizeof(unsigned char));
     int highlight = 1;      //Переменная подсветки выбранного элемента меню
-
+    off_t offset;
     info stats;             //Тестовые структуры
     block block_stats;
 
@@ -45,8 +47,7 @@ int main() {
 
     print_menu(menu_win, highlight);        //Вывод всех панелей 
     print_info(info_win, stats);
-    print_hex(hex_win, NULL);
-    print_normal(normal_win);
+    print_hex(hex_win, NULL, 0, offset, normal_win);
     print_block(block_win, block_stats);
     while(1){
         int choise = menu_choise(menu_win, highlight);  //Выбор меню
@@ -58,8 +59,8 @@ int main() {
                 break;
             }
             case 2:{
-                offsetInput(&bytes);
-                print_hex(hex_win, bytes);
+                offsetInput(&bytes, &offset);
+                print_hex(hex_win, bytes, 0, offset, normal_win);
                 break;
             }
             case 3:{
@@ -69,6 +70,10 @@ int main() {
             case 4:{
                 helpPanel();            //Вызов панели с помощью
                 //print_hex(hex_win);
+                break;
+            }
+            case 11:{
+                hex_menu(hex_win, bytes, 1, offset, normal_win);
                 break;
             }
             case 5:{
