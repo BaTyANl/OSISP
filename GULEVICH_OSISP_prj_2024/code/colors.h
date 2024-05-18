@@ -9,7 +9,8 @@
 #define COLOR_DEEP_PINK 12
 #define COLOR_GRAY 13
 #define COLOR_BEIGE 14
-
+#define COLOR_EXC 46
+#define COLOR_TEAL 47
 #define MENU_GREEN 30
 #define MENU_YELLOW 31
 #define MENU_BLUE 32

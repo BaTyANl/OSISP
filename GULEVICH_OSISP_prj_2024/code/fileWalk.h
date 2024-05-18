@@ -3,7 +3,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <unistd.h>
 
-int readOffset(unsigned char** page, off_t offset);
+int readFile(unsigned char** page, off_t offset, const char* filename);

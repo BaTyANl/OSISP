@@ -5,6 +5,10 @@
 #include "colors.h"
 #include "hexPanel.h"
 #include "memoryWalk.h"
+#include "errorWindow.h"
+#include "blockPanel.h"
+#include "infoPanel.h"
+
 
                             //Верхняя панель меню
 #define WIDTH_MENU 80

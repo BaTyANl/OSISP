@@ -1,5 +1,7 @@
 #include "infoPanel.h"
 
+info infoStats;
+
 const char* info_fld[] = {  //Сообщения для вывода
     "Type: ",
     "Name: ",
@@ -12,23 +14,16 @@ const char* info_fld[] = {  //Сообщения для вывода
 void print_stats(WINDOW* info_win, info stats){ //Вывод информации
     int y = 2;
     int x = 1;
-    stats.types = file;                         //Тестовая структура
-    stats.name = "file.txt";
-    stats.path = "D/pap/papka2/papka3/";
-    stats.size = 12345;
+    stats.type = ".png";                         //Тестовая структура
+    stats.name = "testPhoto";
+    stats.path = "home/batyanl/osisp/";
+    stats.size = 23357;
     stats.access = READ_ONLY;
 
     wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
     mvwprintw(info_win, y, 1, "%s", info_fld[0]);       //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
-
-    if(stats.types == file)                             //Вывод 
-        mvwprintw(info_win, ++y, 1, "%s", "File");
-    else
-        if(stats.types == folder)
-            mvwprintw(info_win, ++y, 1, "%s", "Folder");
-        else
-            mvwprintw(info_win, ++y, 1, "%s", "Link");
+    mvwprintw(info_win, ++y, 1, "%s", stats.type);
     y++;
 
     wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
@@ -53,6 +48,7 @@ void print_stats(WINDOW* info_win, info stats){ //Вывод информаци�
     } else{
         mvwprintw(info_win, ++y, 1, "%s", stats.path);
     }
+    y++;
     wattron(info_win, COLOR_PAIR(INFO_PANEL));          //Цвет
     mvwprintw(info_win, ++y, 1, "%s", info_fld[3]);     //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
@@ -63,10 +59,14 @@ void print_stats(WINDOW* info_win, info stats){ //Вывод информаци�
     wattron(info_win, COLOR_PAIR(INFO_PANEL));              //Цвет
     mvwprintw(info_win, ++y, 1, "%s", info_fld[4]);        //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
-    if(stats.access == READ_ONLY)                           //Вывод 
-        mvwprintw(info_win, ++y, 1, "%s", "Read-Only");
-    else
-        mvwprintw(info_win, ++y, 1, "%s", "Read-Write");
+    if(stats.access == NO_DATA){
+        mvwprintw(info_win, ++y, 1, "%s", "N/D");
+    } else{
+        if(stats.access == READ_ONLY)                           //Вывод 
+            mvwprintw(info_win, ++y, 1, "%s", "Read-Only");
+        else
+            mvwprintw(info_win, ++y, 1, "%s", "Read-Write");
+    }
 }
 
 void print_info(WINDOW *info_win, info stats){              //Создание окна

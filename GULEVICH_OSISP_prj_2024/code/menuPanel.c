@@ -93,6 +93,15 @@ int menu_choise(WINDOW *menu_win, int highlight){   //Выбор в меню
     return choise;
 }
 
+void pageInBytes(unsigned char* page, unsigned char** bytes, off_t offset){
+    long page_size = sysconf(_SC_PAGESIZE);
+    off_t trueOffset = offset % page_size;
+
+    for (int i = 0; i < 304; i++){
+        (*bytes)[i] = page[trueOffset++];
+    }
+}
+
 
 void printFilePanel(WINDOW* win_open){              //Вывод панели с вводом пути к файлу
 
@@ -132,7 +141,7 @@ void printOffsetPanel(WINDOW* off_open){              //Вывод панели 
 
     wbkgd(off_open, COLOR_PAIR(TOP_PANEL_COLOR));   //Установка цвета для окна
     box(off_open, 0, 0);                            //Обозначение границ окна
-    mvwprintw(off_open, 0, 9 , "%s", "Memory opening"); //Вывод строк
+    mvwprintw(off_open, 0, 8 , "%s", "Memory opening"); //Вывод строк
     mvwprintw(off_open, 2, 1 , "%s", "Input offset.");
     mvwprintw(off_open, 3, 1 , "%s", "Press F1 to cancel.");
     wrefresh(off_open);                             //Обновление окна
@@ -142,38 +151,50 @@ void offsetInput(unsigned char** bytes, off_t* offset){                         
     WINDOW* off_open;                               //Окно
     int maxx, maxy;
     getmaxyx(stdscr, maxy, maxx);
+
+    unsigned char *page;
+    long page_size = sysconf(_SC_PAGESIZE);
+
+    page = (unsigned char*)calloc(page_size, sizeof(unsigned char));
+
+
+
+    int errFl = 1;
     off_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);    //Создание окна
-    printOffsetPanel(off_open);                                 //Вывод окна
-    keypad(off_open, true);                                     //Выключение обработки нажатий
-    int c = wgetch(off_open);
-    if(c == KEY_F(1)){                                          //F1 - Выход
-        delwin(off_open);
-        return;
+    while(errFl){
+        off_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);
+        errFl = 0;
+        printOffsetPanel(off_open);                                 //Вывод окна
+        keypad(off_open, true);                                     //Выключение обработки нажатий
+        int c = wgetch(off_open);
+        if(c == KEY_F(1)){                                          //F1 - Выход
+            delwin(off_open);
+            return;
+        }
+        curs_set(1);
+        echo();
+        
+        if (mvwscanw(off_open, 4, 1, "%ld", &(*offset)) != 1){
+            noecho();
+            curs_set(0);
+            printError("Offset error", "Invalid Input", "Only decimals");
+            errFl = 1;
+        } else  {
+        noecho();
+        curs_set(0);
+        int error = readOffset(&page, *offset);
+            if (error == 2){
+                printError("Offset error", "Memory opening error", "Use sudo ./program");
+                errFl = 1;
+            }
+            if (error == 3){
+                printError("Offset error", "Memory read error", "Input another offset");
+                errFl = 1;
+            }
+        }
     }
-    curs_set(1);
-    echo();
-
-    if (mvwscanw(off_open, 4, 1, "%ld", &(*offset)) != 1){
-        //окно с ошибкой;
-    }
-
-    noecho();
-    curs_set(0);
-    int error = readOffset(bytes, *offset);
-    /*if (error ==2){
-        mvwprintw(off_open, 5, 1 , "%s", "Opening.");
-    }
-    if (error == 1){
-        mvwprintw(off_open, 5, 1 , "%s", "Success.");
-    }
-    if (error == 3){
-        mvwprintw(off_open, 5, 1 , "%s", "Cursor.");
-    }
-    if (error == 4){
-        mvwprintw(off_open, 5, 1 , "%s", "Reading.");
-    }*/
-    wrefresh(off_open);
-    getch();
+    //blockStats.offset = *offset;
+    pageInBytes(page, bytes, *offset);
     delwin(off_open);                       //Освобождение памяти
 }
 

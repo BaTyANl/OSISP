@@ -6,8 +6,6 @@
 #include "hexPanel.h"
 #include "normalPanel.h"
 
-
-
 void init_app();            //Инициализация приложения
 void init_menu_panel();     //Инициализация меню
 void init_block_panel();    //Инициализация панели с блочной информацией
@@ -23,12 +21,13 @@ int main() {
     WINDOW *hex_win;
     WINDOW *normal_win;
     WINDOW *block_win;  
+    info infoStats;
+    block blockStats;
     unsigned char *bytes;
     bytes = (unsigned char*)calloc(304, sizeof(unsigned char));
     int highlight = 1;      //Переменная подсветки выбранного элемента меню
     off_t offset;
-    info stats;             //Тестовые структуры
-    block block_stats;
+
 
     initscr();              //Инициализация ncurses
     clear();
@@ -46,9 +45,9 @@ int main() {
     refresh();                      //Обновление окна терминала
 
     print_menu(menu_win, highlight);        //Вывод всех панелей 
-    print_info(info_win, stats);
-    print_hex(hex_win, NULL, 0, offset, normal_win);
-    print_block(block_win, block_stats);
+    print_info(info_win, infoStats);
+    print_hex(hex_win, bytes, 0, offset, normal_win);
+    print_block(block_win, blockStats);
     while(1){
         int choise = menu_choise(menu_win, highlight);  //Выбор меню
 
