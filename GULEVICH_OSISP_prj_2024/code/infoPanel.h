@@ -6,29 +6,22 @@
 #define WIDTH_INFO 13
 #define HEIGHT_INFO 21
 
-#define FOLDER_TYPE "folder"
-#define FILE_TYPE "file"
-#define SYMBOLIC_LINK_TYPE "symbolic link"
-
 typedef struct info     //Структура с информацией
 {
     char* name;         //Имя
-
-    enum types{         //Тип
-       folder = 1,
-       file,
-       symLink
-    }types;
-
+    char* type;
     char* path;         //Полный путь
     int size;           //Размер
 
     enum access{        //Тип доступа
         READ_ONLY = 1,
-        READ_WRITE
+        READ_WRITE,
+        NO_DATA
     }access;
 
 }info;
+
+//extern info infoStats;
 
 extern const char* info_fld[];  
 

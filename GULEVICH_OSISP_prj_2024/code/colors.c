@@ -20,7 +20,11 @@ void ext_start_color() {
     init_color(COLOR_DEEP_BLUE, 2, 46, 112);
     init_color(COLOR_BEIGE, 209, 188, 138);
     init_color(COLOR_GRAY, 255, 255, 255);
-    
+
+    init_color(COLOR_EXC, 512, 0, 0);
+    init_color(COLOR_TEAL, 0, 512, 512);
+    init_pair(EXCEPTION_COLOR, COLOR_GREEN, COLOR_EXC);
+
     init_pair(MENU_GREEN, COLOR_GREEN, COLOR_BLACK);
     init_pair(MENU_YELLOW, COLOR_YELLOW, COLOR_DEEP_BLUE);
     init_pair(MENU_RED, COLOR_RED, COLOR_DEEP_BLUE);
@@ -37,7 +41,7 @@ void ext_start_color() {
     init_pair(BOTTOM_PANEL_ITEM, COLOR_WHITE, COLOR_BLACK);
     init_pair(BOTTOM_PANEL_SLCTD_ITEM, COLOR_BLACK, COLOR_CYAN);
     
-    init_pair(EXCEPTION_COLOR, COLOR_WHITE, COLOR_RED);
+    
     init_pair(WARNING_BOX_COLOR, COLOR_WHITE, COLOR_YELLOW);
 
     init_pair(SLCTD_EXCEPTION_COLOR, COLOR_BLACK, COLOR_WHITE);

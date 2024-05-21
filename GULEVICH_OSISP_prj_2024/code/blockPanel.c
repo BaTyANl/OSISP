@@ -8,13 +8,15 @@ static char *block_info[5] = {  //Сообщения с информацией
     "Sector size: "
 };
 
+//block blockStats;
+
 static void print_block(WINDOW *block_win, block block_stats){  //Вывод панельки
 
-    block_stats.offset = 23235983;                          //Тестовая структура
-    block_stats.block = 2343;
-    block_stats.block_size = 4096;
-    block_stats.sector = 20;
-    block_stats.sector_size = 128;
+    block_stats.offset = 54;                          //Тестовая структура
+    block_stats.block = 1;
+    block_stats.block_size = 4092;
+    block_stats.sector = 1;
+    block_stats.sector_size = 256;
 
 
     wbkgd(block_win, COLOR_PAIR(TOP_PANEL_COLOR));          //Устанавливанем цвет
