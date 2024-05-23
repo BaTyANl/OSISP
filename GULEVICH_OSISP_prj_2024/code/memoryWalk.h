@@ -6,4 +6,4 @@
 #include <string.h>
 #include <unistd.h>
 
-int readOffset(unsigned char** page, off_t offset);
+int readOffset(unsigned char** bytes, off_t offset);
