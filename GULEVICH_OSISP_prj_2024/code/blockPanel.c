@@ -8,29 +8,24 @@ static char *block_info[5] = {  //Сообщения с информацией
     "Sector size: "
 };
 
-//block blockStats;
+block block_stats;
 
-static void print_block(WINDOW *block_win, block block_stats){  //Вывод панельки
-
-    block_stats.offset = 54;                          //Тестовая структура
-    block_stats.block = 1;
-    block_stats.block_size = 4092;
-    block_stats.sector = 1;
-    block_stats.sector_size = 256;
-
+void print_block(WINDOW *block_win, off_t off){  //Вывод панельки
 
     wbkgd(block_win, COLOR_PAIR(TOP_PANEL_COLOR));          //Устанавливанем цвет
     mvwprintw(block_win, 0, 2, "%s", block_info[0]);
-    mvwprintw(block_win, 1, 2, "%08X", block_stats.offset);
+    mvwprintw(block_win, 1, 2, "%08X", block_stats.offset + off - 1);
 
+    block_stats.block = (block_stats.offset + off - 1)/4096;
     mvwprintw(block_win, 0, 17, "%s", block_info[1]);
     mvwprintw(block_win, 1, 17, "%04X", block_stats.block);
 
     mvwprintw(block_win, 0, 33, "%s", block_info[2]);
     mvwprintw(block_win, 1, 33, "%d", block_stats.block_size);
 
+    block_stats.sector = ((block_stats.offset + off - 1)/256)%16;
     mvwprintw(block_win, 0, 51, "%s", block_info[3]);
-    mvwprintw(block_win, 1, 51, "%d", block_stats.sector); 
+    mvwprintw(block_win, 1, 51, "%02d", block_stats.sector); 
 
     mvwprintw(block_win, 0, 64, "%s", block_info[4]);
     mvwprintw(block_win, 1, 64, "%d", block_stats.sector_size);  //Выводим все

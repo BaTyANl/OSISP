@@ -9,6 +9,7 @@
         "normalpanel.h": "c",
         "ncurses.h": "c",
         "blockpanel.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "stat.h": "c"
     }
 }

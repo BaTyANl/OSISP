@@ -10,11 +10,11 @@
 typedef struct block{   //Структура о блочной инфе
     off_t offset;         //Смещение
     int block;          //Номер блока
-    int block_size;     //Размер блока
+    long block_size;     //Размер блока
     int sector;         //Номер сектора в блоке
     int sector_size;
 }block;
 
-//extern block blockStats;
+extern block block_stats;
 
-static void print_block(WINDOW *block_win, block block_stats);  //Вывод панельки
+void print_block(WINDOW *block_win, off_t off);  //Вывод панельки

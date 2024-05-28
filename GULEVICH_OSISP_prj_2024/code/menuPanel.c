@@ -93,16 +93,6 @@ int menu_choise(WINDOW *menu_win, int highlight){   //Выбор в меню
     return choise;
 }
 
-void pageInBytes(unsigned char* page, unsigned char** bytes, off_t offset){
-    long page_size = sysconf(_SC_PAGESIZE);
-    off_t trueOffset = offset % page_size;
-
-    for (int i = 0; i < 304; i++){
-        (*bytes)[i] = page[trueOffset++];
-    }
-}
-
-
 void printFilePanel(WINDOW* win_open){              //Вывод панели с вводом пути к файлу
 
     wbkgd(win_open, COLOR_PAIR(TOP_PANEL_COLOR));   //Установка цвета для окна
@@ -113,32 +103,50 @@ void printFilePanel(WINDOW* win_open){              //Вывод панели с
     wrefresh(win_open);                             //Обновление окна
 }
 
-void filePathInput(){                               //Ввод пути к файлу
+void filePathInput(unsigned char** bytes){                               //Ввод пути к файлу
     WINDOW* win_open;                               //Окно
     int maxx, maxy;
     getmaxyx(stdscr, maxy, maxx);
-    win_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);    //Создание окна
-    printFilePanel(win_open);                       //Вывод окна
-    keypad(win_open, true);                         //Выключение обработки нажатий
-    int c = wgetch(win_open);
-    if(c == KEY_F(1)){                              //F1 - Выход
-        delwin(win_open);
-        return;
-    }
+    int errFl = 1;
     char path[40];
-    curs_set(1);                                    //Включение отображения курсора
-    echo();           
-    mvwgetstr(win_open, 4, 1, path);        //Починить отображение ввода
-    noecho();
-    curs_set(0);
-    getch();
-    //открытие файла
+    while(errFl){
+        win_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);    //Создание окна
+        errFl = 0;
+        printFilePanel(win_open);                       //Вывод окна
+        keypad(win_open, true);                         //Выключение обработки нажатий
+        int c = wgetch(win_open);
+        if(c == KEY_F(1)){                              //F1 - Выход
+            delwin(win_open);
+            return;
+        }   
+        curs_set(1);                                    //Включение отображения курсора
+        echo();           
+        mvwscanw(win_open, 4, 1, "%s", &path);        //Починить отображение ввода
+        path[strlen(path)] = '\0';
+        noecho();
+        curs_set(0);
+        //block_stats.offset = 0;
+        int error = readFile(bytes, path);
+        if (error == 2){
+            printError("File error", "Unable to open", "Invalid path");
+            errFl = 1;
+        }
+        if (error == 3){
+            printError("File error", "Unable to read", "Invalid file");
+            errFl = 1; 
+        }
+    }
+
+    char* ret = strrchr(path, '/');
+    strcpy(info_stats.path, path);
+    strcpy(info_stats.name, ret);
+    ret = strrchr(path, '.');
+    strcpy(info_stats.type, ret);
     delwin(win_open);                       //Освобождение памяти
 }
 
 
 void printOffsetPanel(WINDOW* off_open){              //Вывод панели с вводом пути к файлу
-
     wbkgd(off_open, COLOR_PAIR(TOP_PANEL_COLOR));   //Установка цвета для окна
     box(off_open, 0, 0);                            //Обозначение границ окна
     mvwprintw(off_open, 0, 8 , "%s", "Memory opening"); //Вывод строк
@@ -147,20 +155,14 @@ void printOffsetPanel(WINDOW* off_open){              //Вывод панели 
     wrefresh(off_open);                             //Обновление окна
 }
 
-void offsetInput(unsigned char** bytes, off_t* offset){                               //Ввод пути к файлу
+void offsetInput(unsigned char** bytes){                               //Ввод пути к файлу
     WINDOW* off_open;                               //Окно
     int maxx, maxy;
     getmaxyx(stdscr, maxy, maxx);
 
-    unsigned char *page;
     long page_size = sysconf(_SC_PAGESIZE);
 
-    page = (unsigned char*)calloc(page_size, sizeof(unsigned char));
-
-
-
     int errFl = 1;
-    off_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);    //Создание окна
     while(errFl){
         off_open = newwin(10, 30, (maxy - 10)/2, (maxx - 30)/2);
         errFl = 0;
@@ -174,15 +176,15 @@ void offsetInput(unsigned char** bytes, off_t* offset){                         
         curs_set(1);
         echo();
         
-        if (mvwscanw(off_open, 4, 1, "%ld", &(*offset)) != 1){
+        if (mvwscanw(off_open, 4, 1, "%ld", &(block_stats.offset)) != 1){
             noecho();
             curs_set(0);
             printError("Offset error", "Invalid Input", "Only decimals");
             errFl = 1;
-        } else  {
-        noecho();
-        curs_set(0);
-        int error = readOffset(&page, *offset);
+        } else {
+            noecho();
+            curs_set(0);
+            int error = readOffset(bytes);
             if (error == 2){
                 printError("Offset error", "Memory opening error", "Use sudo ./program");
                 errFl = 1;
@@ -193,8 +195,8 @@ void offsetInput(unsigned char** bytes, off_t* offset){                         
             }
         }
     }
-    //blockStats.offset = *offset;
-    pageInBytes(page, bytes, *offset);
+    info_stats.access = READ_ONLY;
+    info_stats.type = "Memory file";
     delwin(off_open);                       //Освобождение памяти
 }
 

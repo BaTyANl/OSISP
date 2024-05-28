@@ -5,5 +5,7 @@
 #include <sys/mman.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include "blockPanel.h"
 
-int readOffset(unsigned char** bytes, off_t offset);
+int readOffset(unsigned char** bytes);

@@ -21,8 +21,8 @@ typedef struct info     //Структура с информацией
 
 }info;
 
-//extern info infoStats;
+extern info info_stats;
 
 extern const char* info_fld[];  
 
-void print_info(WINDOW *info_win, info stats);  //Вывод окна
+void print_info(WINDOW *info_win);  //Вывод окна

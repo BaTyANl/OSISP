@@ -1,13 +1,13 @@
 #include "memoryWalk.h"
 
 
-int readOffset(unsigned char** bytes, off_t offset){
+int readOffset(unsigned char** bytes){
     int fd = open("/proc/kcore", O_RDONLY);
     if (fd == -1){
         return 2;
     }
 
-    if(lseek(fd, offset, SEEK_SET) == -1){
+    if(lseek(fd, block_stats.offset, SEEK_SET) == -1){
         close(fd);
         return 3;
     }

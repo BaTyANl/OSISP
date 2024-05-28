@@ -6,5 +6,6 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <unistd.h>
+#include "blockPanel.h"
 
-int readFile(unsigned char** page, off_t offset, const char* filename);
+int readFile(unsigned char** page, const char* filename);
