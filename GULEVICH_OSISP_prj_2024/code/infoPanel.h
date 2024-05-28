@@ -8,10 +8,10 @@
 
 typedef struct info     //Структура с информацией
 {
-    char* name;         //Имя
-    char* type;
-    char* path;         //Полный путь
-    int size;           //Размер
+    char name[40];         //Имя
+    char type[40];
+    char path[40];         //Полный путь
+    size_t size;           //Размер
 
     enum access{        //Тип доступа
         READ_ONLY = 1,

@@ -7,6 +7,8 @@
 #include "hexPanel.h"
 #include "infoPanel.h"
 #include "fileWalk.h"
+#include "newByte.h"
+#include "errorWindow.h"
                             //Панель с байтами
 #define WIDTH_HEX 49
 #define HEIGHT_HEX 21

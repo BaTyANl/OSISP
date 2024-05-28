@@ -35,7 +35,7 @@ void print_stats(WINDOW* info_win){ //Вывод информации
         y++;
         for(int i = 0, j = 0; i < strlen(info_stats.path); i++, j++){    //Вывод с переносом
             mvwaddch(info_win, y, j + x, info_stats.path[i]);
-            if(info_stats.path[i] == '/'){
+            if(info_stats.path[i] == '/' && j != 0){
                 y++;
                 j = 0;
                 x = 1;
@@ -49,7 +49,7 @@ void print_stats(WINDOW* info_win){ //Вывод информации
     mvwprintw(info_win, ++y, 1, "%s", info_fld[3]);     //Вывод 
     wattroff(info_win, COLOR_PAIR(INFO_PANEL));
 
-    mvwprintw(info_win, ++y, 1, "%d B", info_stats.size);       //Вывод 
+    mvwprintw(info_win, ++y, 1, "%zu KB", info_stats.size);       //Вывод 
     y++;
 
     wattron(info_win, COLOR_PAIR(INFO_PANEL));              //Цвет
@@ -60,12 +60,13 @@ void print_stats(WINDOW* info_win){ //Вывод информации
     } else{
         if(info_stats.access == READ_ONLY)                           //Вывод 
             mvwprintw(info_win, ++y, 1, "%s", "Read-Only");
-        else
+        if(info_stats.access == READ_WRITE)  
             mvwprintw(info_win, ++y, 1, "%s", "Read-Write");
     }
 }
 
 void print_info(WINDOW *info_win){              //Создание окна
+    werase(info_win);
     box(info_win, 0, 0);                                    //Обводка окна
     wattron(info_win, COLOR_PAIR(MENU_GREEN));              //Цвет
     mvwprintw(info_win, 0, 1, "%s", "Info panel");          //Вывод 

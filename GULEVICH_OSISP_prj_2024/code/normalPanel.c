@@ -13,7 +13,7 @@ void print_normal(WINDOW *normal_win, unsigned char* bytes, int highlight_number
                     wattron(normal_win, COLOR_PAIR(MENU_SLCTD_ITEM));
                 }
                 if ((bytes[16*i + j] > 0 && bytes[16*i + j] < 32) || (bytes[16*i + j] > 126 && bytes[16*i + j] < 160)){
-                    mvwprintw(normal_win, i+1, 1 + j, "%lc", bytes[16*i + j] + 0x2654);
+                    mvwprintw(normal_win, i+1, 1 + j, "%lc", bytes[16*i + j] + 0x028E);
                 } else {
                     if (bytes[16*i + j] == 0){
                         mvwprintw(normal_win, i+1, 1 + j, "%c", '.');

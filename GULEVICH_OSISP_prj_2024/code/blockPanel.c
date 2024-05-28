@@ -11,7 +11,7 @@ static char *block_info[5] = {  //Сообщения с информацией
 block block_stats;
 
 void print_block(WINDOW *block_win, off_t off){  //Вывод панельки
-
+    werase(block_win);
     wbkgd(block_win, COLOR_PAIR(TOP_PANEL_COLOR));          //Устанавливанем цвет
     mvwprintw(block_win, 0, 2, "%s", block_info[0]);
     mvwprintw(block_win, 1, 2, "%08X", block_stats.offset + off - 1);

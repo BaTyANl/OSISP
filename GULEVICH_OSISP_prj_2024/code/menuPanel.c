@@ -62,6 +62,7 @@ void print_menu(WINDOW *menu_win, int highlight){   //Функция вывод�
 
 int menu_choise(WINDOW *menu_win, int highlight){   //Выбор в меню
     int choise;
+    wrefresh(menu_win);
     int c;
     while(1) {
         c = wgetch(menu_win);                       //Считывание нажатий
@@ -125,8 +126,9 @@ void filePathInput(unsigned char** bytes){                               //Вв�
         path[strlen(path)] = '\0';
         noecho();
         curs_set(0);
-        //block_stats.offset = 0;
+        block_stats.offset = 0;
         int error = readFile(bytes, path);
+
         if (error == 2){
             printError("File error", "Unable to open", "Invalid path");
             errFl = 1;
@@ -136,12 +138,12 @@ void filePathInput(unsigned char** bytes){                               //Вв�
             errFl = 1; 
         }
     }
-
-    char* ret = strrchr(path, '/');
     strcpy(info_stats.path, path);
-    strcpy(info_stats.name, ret);
+    char* ret = strrchr(path, '/');
+    strcpy(info_stats.name, ret+1);
     ret = strrchr(path, '.');
     strcpy(info_stats.type, ret);
+    info_stats.access = READ_ONLY;
     delwin(win_open);                       //Освобождение памяти
 }
 
@@ -196,7 +198,7 @@ void offsetInput(unsigned char** bytes){                               //Вво�
         }
     }
     info_stats.access = READ_ONLY;
-    info_stats.type = "Memory file";
+    strcpy(info_stats.type, "Memory file");
     delwin(off_open);                       //Освобождение памяти
 }
 

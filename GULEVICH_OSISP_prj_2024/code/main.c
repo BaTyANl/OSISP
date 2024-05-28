@@ -41,16 +41,17 @@ int main() {
 
     refresh();                      //Обновление окна терминала
     init_structures();
-    print_menu(menu_win, highlight);        //Вывод всех панелей 
+
     print_info(info_win);
     print_hex(hex_win, bytes, 0, normal_win, block_win);
     print_block(block_win, 0);
     while(1){
+        print_menu(menu_win, highlight);        //Вывод всех панелей 
         int choise = menu_choise(menu_win, highlight);  //Выбор меню
 
         switch (choise){
             case 1:{
-                filePathInput();        //Вызов панели с вводом файла
+                filePathInput(&bytes);        //Вызов панели с вводом файла
                 print_hex(hex_win, bytes, 0, normal_win, block_win);
                 print_info(info_win);
                 break;
@@ -62,12 +63,20 @@ int main() {
                 break;
             }
             case 3:{
-                getch();
+                if (info_stats.access == READ_ONLY){
+                    info_stats.access = READ_WRITE;
+                } else {
+                    if (info_stats.access == READ_WRITE){
+                        info_stats.access = READ_ONLY;
+                    }
+                }
+                werase(info_win);
+                print_info(info_win);
                 break;
             }
             case 4:{
                 helpPanel();            //Вызов панели с помощью
-                //print_hex(hex_win);
+                print_hex(hex_win, bytes, 0, normal_win, block_win);
                 break;
             }
             case 11:{
@@ -93,9 +102,9 @@ void init_structures(){
     block_stats.sector = 1;
     block_stats.sector_size = 256;
 
-    info_stats.type = "N/D";                         //Тестовая структура
-    info_stats.name = "N/D";
-    info_stats.path = "N/D";
+    strcpy(info_stats.type, "N/D");
+    strcpy(info_stats.name, "N/D");
+    strcpy(info_stats.path, "N/D");
     info_stats.size = 0;
     info_stats.access = NO_DATA;
 }
